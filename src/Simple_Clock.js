@@ -6,11 +6,11 @@
 //                   |___/\__\__,_|_| |_| |_|\__,_|\__|\__|                   //
 //                                                                            //
 //  File      : Simple_Clock.js                                               //
-//  Project   : stdmatt-demos                                                 //
+//  Project   : simple_clock                                                  //
 //  Date      : 17 Jul, 2019                                                  //
 //  License   : GPLv3                                                         //
 //  Author    : stdmatt <stdmatt@pixelwizards.io>                             //
-//  Copyright : stdmatt - 2019                                                //
+//  Copyright : stdmatt 2019, 2020                                            //
 //                                                                            //
 //  Description :                                                             //
 //   Displays a simple digital / analog clock.                                //
