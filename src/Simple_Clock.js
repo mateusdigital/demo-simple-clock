@@ -56,6 +56,33 @@ function Draw_Arc(value, maxValue, radius, color_a, color_b)
 //------------------------------------------------------------------------------
 function Setup()
 {
+
+    //
+    // Configure the Canvas.
+    const parent        = document.getElementById("canvas_div");
+    const parent_width  = parent.clientWidth;
+    const parent_height = parent.clientHeight;
+
+    const max_side = Math_Max(parent_width, parent_height);
+    const min_side = Math_Min(parent_width, parent_height);
+
+    const ratio = min_side / max_side;
+
+    // Landscape
+    if(parent_width > parent_height) {
+        Canvas_CreateCanvas(800, 800 * ratio, parent);
+    }
+    // Portrait
+    else {
+        Canvas_CreateCanvas(800 * ratio, 800, parent);
+    }
+
+    Canvas.style.width  = "100%";
+    Canvas.style.height = "100%";
+
+
+    //
+    // Configure the values
     hours   = date.getHours  ();
     minutes = date.getMinutes();
     seconds = date.getSeconds();
@@ -63,6 +90,8 @@ function Setup()
     total_time = hours   * SECONDS_IN_HOUR
                + minutes * SECONDS_IN_MINUTE
                + seconds;
+
+    Canvas_Draw(0);
 }
 
 //------------------------------------------------------------------------------
@@ -103,7 +132,7 @@ function Draw(dt)
         str += " : " + ((s < 10) ? "0" + s : s);
     }
 
-    CurrContext.font = "30px Arial";
+    CurrContext.font      = "30px Arial";
     CurrContext.fillStyle = "white";
     CurrContext.fillText(str, -CurrContext.measureText(str).width/2, 0);
 }
@@ -112,10 +141,11 @@ function Draw(dt)
 //----------------------------------------------------------------------------//
 // Entry Point                                                                //
 //----------------------------------------------------------------------------//
-Canvas_Setup({
-    main_title        : "Simple Clock",
-    main_date         : "Jul 17, 2019",
-    main_version      : "v0.0.1",
-    main_instructions : "",
-    main_link: "<a href=\"http://stdmatt.com/demos/startfield.html\">More info</a>"
-});
+Setup();
+// Canvas_Setup({
+//     main_title        : "Simple Clock",
+//     main_date         : "Jul 17, 2019",
+//     main_version      : "v0.0.1",
+//     main_instructions : "",
+//     main_link: "<a href=\"http://stdmatt.com/demos/startfield.html\">More info</a>"
+// });
