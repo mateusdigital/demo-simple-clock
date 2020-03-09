@@ -80,6 +80,16 @@ function Setup()
     Canvas.style.width  = "100%";
     Canvas.style.height = "100%";
 
+    //
+    // Add the information.
+    const info = document.createElement("p");
+    info.innerHTML = String_Cat(
+        "Simple Clock", "<br>",
+        "Jul 17, 2019", "<br>",
+        GetVersion(),   "<br>",
+        "<a href=\"http://stdmatt.com/demos/simple_clock.html\">More info</a>"
+    );
+    parent.appendChild(info);
 
     //
     // Configure the values
@@ -143,9 +153,4 @@ function Draw(dt)
 //----------------------------------------------------------------------------//
 Setup();
 // Canvas_Setup({
-//     main_title        : "Simple Clock",
-//     main_date         : "Jul 17, 2019",
-//     main_version      : "v0.0.1",
-//     main_instructions : "",
-//     main_link: "<a href=\"http://stdmatt.com/demos/startfield.html\">More info</a>"
 // });
