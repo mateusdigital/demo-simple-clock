@@ -32,7 +32,7 @@ let hours       = 0;
 let minutes     = 0;
 let seconds     = 0;
 let total_time  = 0;
-let date        = new Date();
+let prev_date   = null;
 let base_radius = 0;
 
 
@@ -99,6 +99,7 @@ function Setup()
 
     //
     // Configure the values
+    date = new Date();
     hours   = date.getHours  ();
     minutes = date.getMinutes();
     seconds = date.getSeconds();
@@ -106,7 +107,7 @@ function Setup()
     total_time = hours   * SECONDS_IN_HOUR
                + minutes * SECONDS_IN_MINUTE
                + seconds;
-
+    prev_date = Date.now();
     Canvas_Draw(0);
 }
 
@@ -117,12 +118,14 @@ function Draw(dt)
     Canvas_SetStrokeSize(STROKE_SIZE);
     Canvas_SetStrokeStyle("white");
 
-    total_time += dt;
+    const curr_date = Date.now();
+    total_time += (curr_date - prev_date) / 1000;
+    prev_date = curr_date;
 
     seconds = (total_time % SECONDS_IN_MINUTE);
     minutes = (total_time % SECONDS_IN_HOUR  ) / SECONDS_IN_MINUTE;
     hours   = (total_time % SECONDS_IN_DAY   ) / SECONDS_IN_HOUR;
-    if(hours > 12) {
+    if(hours > 13) {
         hours -= 12;
     }
 
