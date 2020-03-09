@@ -19,18 +19,21 @@
 //----------------------------------------------------------------------------//
 // Constants                                                                  //
 //----------------------------------------------------------------------------//
-const SECONDS_IN_MINUTE = 60;
-const SECONDS_IN_HOUR   = SECONDS_IN_MINUTE * 60;
-const SECONDS_IN_DAY    = 60 * 60 * 24;
+const SECONDS_IN_MINUTE     = 60;
+const SECONDS_IN_HOUR       = SECONDS_IN_MINUTE * 60;
+const SECONDS_IN_DAY        = 60 * 60 * 24;
+const STROKE_SIZE           = 10;
+const CLOCK_SIZE_MULTIPLIER = 0.9;
 
 //----------------------------------------------------------------------------//
 // Variables                                                                  //
 //----------------------------------------------------------------------------//
-let hours   = 0;
-let minutes = 0;
-let seconds = 0;
-let total_time;
-let date = new Date();
+let hours       = 0;
+let minutes     = 0;
+let seconds     = 0;
+let total_time  = 0;
+let date        = new Date();
+let base_radius = 0;
 
 
 //----------------------------------------------------------------------------//
@@ -71,11 +74,14 @@ function Setup()
     // Landscape
     if(parent_width > parent_height) {
         Canvas_CreateCanvas(800, 800 * ratio, parent);
+        base_radius = Canvas_Half_Height - STROKE_SIZE;
     }
     // Portrait
     else {
         Canvas_CreateCanvas(800 * ratio, 800, parent);
+        base_radius = Canvas_Half_Width - STROKE_SIZE;
     }
+    base_radius *= CLOCK_SIZE_MULTIPLIER;
 
     Canvas.style.width  = "100%";
     Canvas.style.height = "100%";
@@ -108,13 +114,10 @@ function Setup()
 function Draw(dt)
 {
     Canvas_ClearWindow();
-    Canvas_SetStrokeSize(10);
+    Canvas_SetStrokeSize(STROKE_SIZE);
     Canvas_SetStrokeStyle("white");
 
     total_time += dt;
-
-    let sin    = (1 + Math.sin(seconds / 60 * Math.PI)) / 2;
-    let radius = 80 + (sin * 60);
 
     seconds = (total_time % SECONDS_IN_MINUTE);
     minutes = (total_time % SECONDS_IN_HOUR  ) / SECONDS_IN_MINUTE;
@@ -125,9 +128,9 @@ function Draw(dt)
 
     //
     // Arcs.
-    Draw_Arc(seconds, 60, radius + 00, "#FF0000", "#FF000020");
-    Draw_Arc(minutes, 60, radius + 20, "#00FF00", "#00FF0020");
-    Draw_Arc(hours,   12, radius + 40, "#0000FF", "#0000FF20");
+    Draw_Arc(seconds, 60, base_radius - 40, "#FF0000", "#FF000020");
+    Draw_Arc(minutes, 60, base_radius - 20, "#00FF00", "#00FF0020");
+    Draw_Arc(hours,   12, base_radius - 00, "#0000FF", "#0000FF20");
 
     //
     // Timer.
