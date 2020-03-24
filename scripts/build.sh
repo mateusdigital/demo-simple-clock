@@ -7,7 +7,7 @@
 ##                   |___/\__\__,_|_| |_| |_|\__,_|\__|\__|                   ##
 ##                                                                            ##
 ##  File      : build.sh                                                      ##
-##  Project   : metaballs                                                     ##
+##  Project   : simple_clock                                                  ##
 ##  Date      : Mar 03, 2020                                                  ##
 ##  License   : GPLv3                                                         ##
 ##  Author    : stdmatt <stdmatt@pixelwizards.io>                             ##
@@ -26,8 +26,8 @@ source /usr/local/src/stdmatt/shellscript_utils/main.sh
 ##----------------------------------------------------------------------------##
 ## Variables                                                                  ##
 ##----------------------------------------------------------------------------##
-PROJECT_NAME="metaballs";
-PROJECT_PACKAGE_NAME="metaballs";
+PROJECT_NAME="simple_clock";
+PROJECT_PACKAGE_NAME="simple_clock";
 
 SCRIPT_DIR="$(pw_get_script_dir)";
 ROOT_DIR="$(pw_abspath "${SCRIPT_DIR}/..")";
