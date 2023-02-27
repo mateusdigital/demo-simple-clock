@@ -65,6 +65,61 @@ function Draw_Arc(value, maxValue, radius, color_a, color_b)
 }
 
 
+//------------------------------------------------------------------------------
+function recalculate_sizes()
+{
+
+    const screen_size = Min_Max.from_two_values(
+        get_canvas_width(),
+        get_canvas_height()
+    );
+
+    base_radius = (screen_size.min * 0.5 * CLOCK_SIZE_MULTIPLIER);
+    set_canvas_stroke(STROKE_SIZE);
+
+
+    text_color = "white";
+    text_font  = "50px Arial";
+
+    const ctx       = get_main_canvas_context();
+    const diagonal  = (base_radius * 1.5);
+    const tolerance = 2;
+
+    let min  = 10;
+    let max  = 500;
+    let curr = (min + max) / 2;
+
+    while(true) {
+        curr = to_int(curr);
+
+        ctx.font = `${curr}px Arial`;
+        text_size = ctx.measureText("99 : 99 : 99");
+
+        console.log(`${min} - ${max}: ${text_size.width} - ${diagonal} --> ${ctx.font}`)
+
+        const gap     = (text_size.width - diagonal);
+        const abs_gap = Math.abs(gap);
+
+        console.log(`${gap} - ${abs_gap}: ${tolerance}`);
+        console.log("----------------------------------");
+
+        if(gap < 0 && abs_gap > tolerance) {
+            min  = curr;
+            curr = (min + max) / 2;
+        }
+        else if(gap > 0 && abs_gap > tolerance) {
+            max = curr;
+            curr = (min + max) / 2;
+        }
+        else {
+           text_font = ctx.font;
+           break;
+        }
+
+    }
+
+}
+
 //----------------------------------------------------------------------------//
 // Setup / Draw                                                               //
 //----------------------------------------------------------------------------//
@@ -96,11 +151,9 @@ function setup_standalone_mode()
 //------------------------------------------------------------------------------
 function setup_common(canvas)
 {
-    COLOR = chroma("white")
-    max_distance = Math.max(canvas.width, canvas.height);
-
     set_main_canvas(canvas);
     set_canvas_fill("white");
+    set_canvas_line_width(STROKE_SIZE);
 
     //
     // Configure the values
@@ -114,7 +167,7 @@ function setup_common(canvas)
                + seconds;
     prev_date = Date.now();
 
-    base_radius = get_canvas_height() * 0.5 * CLOCK_SIZE_MULTIPLIER;
+    recalculate_sizes();
 
     translate_canvas_to_center();
     start_draw_loop(draw);
@@ -142,8 +195,6 @@ function draw(dt)
     clear_canvas();
 
     begin_draw();
-        set_canvas_stroke(STROKE_SIZE);
-        set_canvas_stroke("white");
 
         const curr_date = Date.now();
         total_time += (curr_date - prev_date) / 1000;
@@ -176,8 +227,9 @@ function draw(dt)
         }
 
         const ctx = get_main_canvas_context();
-        ctx.font      = "30px Arial";
-        ctx.fillStyle = "white";
-        ctx.fillText(str, -ctx.measureText(str).width/2, 0);
+
+        ctx.font      = text_font;
+        ctx.fillStyle = text_color;
+        ctx.fillText(str, -text_size.width * 0.5, text_size.width * 0.05);
     end_draw();
 }
