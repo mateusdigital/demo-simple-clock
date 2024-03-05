@@ -46,6 +46,12 @@ let total_time  = 0;
 let prev_date   = null;
 let base_radius = 0;
 
+let text_size = null;
+let text_size_width = 0;
+let text_color = "white";
+let text_font  = "50px Arial";
+
+let text_scale_hack = 0.5;
 
 //----------------------------------------------------------------------------//
 // Helper Functions                                                           //
@@ -65,60 +71,56 @@ function Draw_Arc(value, maxValue, radius, color_a, color_b)
 }
 
 
+
+//------------------------------------------------------------------------------
+function estimate_text_width_hack(text, font_size)
+{
+    text_scale_hack = 0.45;
+    const avg_char_width = text_scale_hack * font_size;
+    return text.length * avg_char_width;
+}
+
 //------------------------------------------------------------------------------
 function recalculate_sizes()
 {
+    const screen_size = Math.min(get_canvas_width(), get_canvas_height());
+    base_radius = screen_size * 0.5 * CLOCK_SIZE_MULTIPLIER;
 
-    const screen_size = Min_Max.from_two_values(
-        get_canvas_width(),
-        get_canvas_height()
-    );
-
-    base_radius = (screen_size.min * 0.5 * CLOCK_SIZE_MULTIPLIER);
-    set_canvas_stroke(STROKE_SIZE);
-
-
-    text_color = "white";
-    text_font  = "50px Arial";
-
-    const ctx       = get_main_canvas_context();
-    const diagonal  = (base_radius * 1.5);
+    const ctx = get_main_canvas_context();
+    const diagonal = base_radius * 1.5;
     const tolerance = 2;
 
-    let min  = 10;
-    let max  = 500;
-    let curr = (min + max) / 2;
+    let min = 10;
+    let max = 500;
 
-    while(true) {
-        curr = to_int(curr);
-
+    const text_to_measure = "99 : 99 : 99";
+    while (max - min > tolerance) {
+        let curr = (min + max) / 2;
         ctx.font = `${curr}px Arial`;
-        text_size = ctx.measureText("99 : 99 : 99");
 
-        console.log(`${min} - ${max}: ${text_size.width} - ${diagonal} --> ${ctx.font}`)
-
-        const gap     = (text_size.width - diagonal);
-        const abs_gap = Math.abs(gap);
-
-        console.log(`${gap} - ${abs_gap}: ${tolerance}`);
-        console.log("----------------------------------");
-
-        if(gap < 0 && abs_gap > tolerance) {
-            min  = curr;
-            curr = (min + max) / 2;
+        text_size = ctx.measureText(text_to_measure);
+        if(text_size.width == 0) {
+            text_size_width = estimate_text_width_hack(text_to_measure, curr);
+        } else {
+            var a = estimate_text_width_hack(text_to_measure, curr);
+            console.log(a, text_size.width);
+            text_size_width = text_size.width;
         }
-        else if(gap > 0 && abs_gap > tolerance) {
+        var a = estimate_text_width_hack(text_to_measure, curr);
+        console.log(a, text_size.width);
+
+        let gap = text_size_width - diagonal;
+
+        if (gap < 0) {
+            min = curr;
+        } else {
             max = curr;
-            curr = (min + max) / 2;
         }
-        else {
-           text_font = ctx.font;
-           break;
-        }
-
     }
 
+    text_font = `${min}px Arial`;
 }
+
 
 //----------------------------------------------------------------------------//
 // Setup / Draw                                                               //
@@ -216,7 +218,7 @@ function draw(dt)
         // Arcs.
         Draw_Arc(seconds, 60, base_radius - 40, "#FF0000", "#FF000020");
         Draw_Arc(minutes, 60, base_radius - 20, "#00FF00", "#00FF0020");
-        Draw_Arc(hours,   12, base_radius - 00, "#0000FF", "#0000FF20");
+        Draw_Arc(hours,   12, base_radius -  0, "#0000FF", "#0000FF20");
 
         //
         // Timer.
@@ -235,6 +237,6 @@ function draw(dt)
 
         ctx.font      = text_font;
         ctx.fillStyle = text_color;
-        ctx.fillText(str, -text_size.width * 0.5, text_size.width * 0.05);
+        ctx.fillText(str, -text_size_width * text_scale_hack, text_size_width * 0.05);
     end_draw();
 }
