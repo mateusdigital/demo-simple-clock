@@ -37,7 +37,18 @@ readonly SOURCE_FOLDER="${ROOT_DIR}/out";
 readonly REMOTE_SERVER="mateus@mateus.digital";
 readonly REMOTE_FOLDER="/var/www/mateus.digital/html/simple_clock";
 
-rsync -avz                                       \
+
+
+readonly is_windows_machine="$(uname -a | grep -i "Msys")";
+if [ -n "$is_windows_machine" ]; then
+    echo "On Windows...";
+    scp -r                                 \
+        "${SOURCE_FOLDER}/"*               \
+        "${REMOTE_SERVER}:${REMOTE_FOLDER}"
+
+else
+    rsync -avz                                   \
       "${SOURCE_FOLDER}/"                        \
       -e ssh "${REMOTE_SERVER}:${REMOTE_FOLDER}" \
     ;
+fi;
