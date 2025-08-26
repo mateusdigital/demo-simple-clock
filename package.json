@@ -1,0 +1,30 @@
+{
+  "name": "simple-clock",
+  "description": "simple-clock is a visual experimentation created by mateus.digital",
+  "version": "2.0.0",
+  "build": 8,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mateusdigital/demo-simple-clock.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mateusdigital/demo-simple-clock/issues"
+  },
+  "homepage": "https://mateus.digital/projects/simple-clock",
+  "keywords": [
+    "simple-clock",
+    "javascript",
+    "canvas",
+    "retro",
+    "demo",
+    "demoscene",
+    "creative-coding",
+    "mateus.digital"
+  ],
+  "author": {
+    "name": "Mateus Mesquita",
+    "email": "hello@mateus.digital",
+    "url": "https://mateus.digital"
+  },
+  "license": "GPL-3.0-or-later"
+}
