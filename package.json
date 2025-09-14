@@ -2,7 +2,7 @@
   "name": "simple-clock",
   "description": "simple-clock is a visual experimentation created by mateus.digital",
   "version": "2.0.0",
-  "build": 8,
+  "build": 10,
   "repository": {
     "type": "git",
     "url": "https://github.com/mateusdigital/demo-simple-clock.git"
